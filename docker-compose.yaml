@@ -1,0 +1,27 @@
+version: '3'
+services:
+  core_aondefruta:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    image: core_aondefruta/api
+    ports:
+      - '8080:8080'
+      - '5005:5005'
+    environment:
+      - ADDITIONAL_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m
+      - PROFILE=dev
+      - DATABASE_HOST=mysql-db-aondefruta
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=aonde123
+      - DATABASE_NAME=aonde_fruta_db
+      - DATABASE_PORT=3306
+    links:
+      - mysql-db-aondefruta
+  mysql-db-aondefruta:
+    image: mysql:8.0
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_DATABASE=aonde_fruta_db
+      - MYSQL_ROOT_PASSWORD=aonde123
