@@ -1,19 +1,18 @@
 package br.com.aondefruta.coreaondefruta.model
 
-
 import javax.persistence.*
 import javax.persistence.GenerationType.IDENTITY
 
 @Entity
-@Table(name = "user")
-class User(
+@Table(name = "tree")
+class Tree(
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    var user_id: Int,
+    var id: Int,
     var name: String,
-    var email: String,
-    var user_name: String,
-    var password: String,
-    @OneToMany(mappedBy = "id_user")
-    var trees: List<Tree>? = null
+    var id_user: Int,
+    var latitude: Double,
+    var longitude: Double,
+    var description: String? = "",
 ) {}
