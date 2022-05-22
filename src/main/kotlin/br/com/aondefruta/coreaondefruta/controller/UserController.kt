@@ -20,9 +20,9 @@ class UserController {
     @Autowired
     private lateinit var repository: UserRepository
 
-    @GetMapping("/")
+    @GetMapping("")
     fun findMany(): ResponseEntity<List<User>> {
-        return ResponseEntity.ok(repository.findAll())
+        return ResponseEntity.ok(repository.findAll().toList())
     }
 
     @GetMapping("/{id}")
@@ -30,10 +30,10 @@ class UserController {
         return ResponseEntity.ok(repository.findById(id))
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     fun createUser(@RequestBody user: User): ResponseEntity<User> {
         val newUser = User(
-            id = user.id,
+            user_id = user.user_id,
             name = user.name,
             email = user.email,
             user_name = user.user_name,
