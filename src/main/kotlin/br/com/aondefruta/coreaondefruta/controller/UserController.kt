@@ -1,33 +1,40 @@
 package br.com.aondefruta.coreaondefruta.controller
 
 import br.com.aondefruta.coreaondefruta.model.User
+import br.com.aondefruta.coreaondefruta.repository.TreeRepository
 import br.com.aondefruta.coreaondefruta.repository.UserRepository
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/user")
-class UserController {
+class UserController(
+    private val repositoryTree: TreeRepository,
+) {
+
+    private val logger = LoggerFactory.getLogger(UserController::class.java)
 
     @Autowired
-    private lateinit var repository: UserRepository
+    private lateinit var repositoryUser: UserRepository
 
     @GetMapping("")
     fun findMany(): ResponseEntity<List<User>> {
-        return ResponseEntity.ok(repository.findAll().toList())
+        return ResponseEntity.ok(repositoryUser.findAll().toList())
     }
 
     @GetMapping("/{id}")
-    fun findOne(@PathVariable("id") id: Int): ResponseEntity<Optional<User>> {
-        return ResponseEntity.ok(repository.findById(id))
+    fun findOne(@PathVariable("id") id: Int): ResponseEntity<User> {
+        return if (repositoryUser.existsById(id)) {
+            try {
+                ResponseEntity.ok(repositoryUser.findById(id).get())
+            } catch (e: Exception) {
+                logger.error("UserController.findOne", e)
+                ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+        } else throw NotFoundUserException()
     }
 
     @PostMapping("")
@@ -39,12 +46,34 @@ class UserController {
             user_name = user.user_name,
             password = user.password
         )
-        return ResponseEntity.ok(repository.save(newUser))
+        repositoryUser.save(newUser)
+        throw UserCreatedMessage()
     }
 
-    @DeleteMapping("/delete/{id}") // TODO: 24/03/2022 Não consegue deletar se tiver especies cadastradas
-    fun deleteUser(@PathVariable("id") id: Int) {
-        return repository.deleteById(id)
-        // TODO: 20/03/2022 O que fazer quando deletar usuario com especies cadastradas???
+    @PutMapping("/{id}")
+    fun updateUser(@PathVariable("id") userId: Int, @RequestBody user: User): ResponseEntity<User> {
+        return if (repositoryUser.existsById(userId)) {
+            ResponseEntity.ok(
+                repositoryUser.save(
+                    User(
+                        user_id = userId,
+                        name = user.name,
+                        email = user.email,
+                        user_name = user.user_name,
+                        password = user.password
+                    )
+                )
+            )
+        } else throw NotFoundUserException()
+    }
+
+    @DeleteMapping("/delete/{id}")
+    fun deleteUser(@PathVariable("id") id: Int): ResponseEntity<User> {
+        val userTreesIds = repositoryUser.findById(id).map { user -> user.trees?.map { tree -> tree.id } }.get()
+        if (userTreesIds.isNotEmpty()) {
+            repositoryTree.deleteAllById(userTreesIds)
+        }
+        repositoryUser.deleteById(id)
+        throw UserDeletedMessage()
     }
 }
