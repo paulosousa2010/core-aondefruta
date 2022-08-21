@@ -55,6 +55,7 @@ class TreeController {
     } else throw NotFoundTreeException()
   }
 
+
   @DeleteMapping("/delete/{id}")
   fun deleteTree(@PathVariable("id") treeId: Int): ResponseEntity<Tree> {
     try {
