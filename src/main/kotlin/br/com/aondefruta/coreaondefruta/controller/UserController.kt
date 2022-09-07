@@ -37,6 +37,11 @@ class UserController(
         } else throw NotFoundUserException()
     }
 
+    @GetMapping("/email/{email}")
+    fun findOneEmail(@PathVariable("email") email: String): ResponseEntity<User> {
+        return ResponseEntity.ok(repositoryUser.findByEmail(email))
+    }
+
     @PostMapping("")
     fun createUser(@RequestBody user: User): ResponseEntity<User> {
         val newUser = User(
