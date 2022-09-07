@@ -37,9 +37,12 @@ class UserController(
         } else throw NotFoundUserException()
     }
 
-    @GetMapping("/email/{email}")
-    fun findOneEmail(@PathVariable("email") email: String): ResponseEntity<User> {
-        return ResponseEntity.ok(repositoryUser.findByEmail(email))
+    @GetMapping("/email/{email}/{password}")
+    fun validateUser(
+      @PathVariable("email") email: String,
+      @PathVariable("password") password: String
+    ): ResponseEntity<User> {
+        return ResponseEntity.ok(repositoryUser.validateUser(email, password))
     }
 
     @PostMapping("")
