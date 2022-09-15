@@ -39,10 +39,15 @@ class UserController(
 
     @GetMapping("/email/{email}/{password}")
     fun validateUser(
-      @PathVariable("email") email: String,
-      @PathVariable("password") password: String
+        @PathVariable("email") email: String,
+        @PathVariable("password") password: String
     ): ResponseEntity<User> {
-        return ResponseEntity.ok(repositoryUser.validateUser(email, password))
+        try {
+            return ResponseEntity.ok(repositoryUser.validateUser(email, password))
+        } catch (e: Exception) {
+            logger.error("validateUser", e)
+            throw NotFoundUser()
+        }
     }
 
     @PostMapping("")
@@ -54,8 +59,11 @@ class UserController(
             user_name = user.user_name,
             password = user.password
         )
-        repositoryUser.save(newUser)
-        throw UserCreatedMessage()
+        val hasUser = repositoryUser.hasUserByUserName(newUser.user_name)
+        if (!hasUser) {
+            repositoryUser.save(newUser)
+            throw UserCreatedMessage()
+        } else throw UserAlreadyExists()
     }
 
     @PutMapping("/{id}")

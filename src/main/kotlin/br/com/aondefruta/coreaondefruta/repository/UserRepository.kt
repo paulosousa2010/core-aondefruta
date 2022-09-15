@@ -8,4 +8,7 @@ interface UserRepository : JpaRepository<User, Int> {
 
   @Query("SELECT u FROM User u WHERE u.email = ?1 AND u.password = ?2")
   fun validateUser(email: String, password: String): User
+
+  @Query("SELECT count(u) = 1 from User u where u.user_name = ?1")
+  fun hasUserByUserName(userName: String): Boolean
 }

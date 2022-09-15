@@ -9,6 +9,9 @@ class NotFoundUserException : RuntimeException()
 @ResponseStatus(value = HttpStatus.OK, reason = "Usuário criado com sucesso.")
 class UserCreatedMessage : RuntimeException()
 
+@ResponseStatus(value = HttpStatus.CONFLICT, reason = "Este user name já está em uso!")
+class UserAlreadyExists : RuntimeException()
+
 @ResponseStatus(value = HttpStatus.OK, reason = "Usuário apagado com sucesso.")
 class UserDeletedMessage : RuntimeException()
 
@@ -20,3 +23,6 @@ class TreeAddedMessage : RuntimeException()
 
 @ResponseStatus(value = HttpStatus.OK, reason = "Árvore apagada com sucesso.")
 class TreeDeletedMessage : RuntimeException()
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Usuário não encontrado!")
+class NotFoundUser : RuntimeException()
