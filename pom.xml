@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.aondefruta</groupId>
 	<artifactId>core-aondefruta</artifactId>
-	<version>0.2.2</version>
+	<version>0.2.3</version>
 	<name>core-aondefruta</name>
 	<description>Backend AondeFruta</description>
 	<properties>
@@ -60,6 +60,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
