@@ -54,13 +54,13 @@ class UserController(
     @PostMapping("")
     fun createUser(@RequestBody user: User): ResponseEntity<User> {
         val newUser = User(
-            user_id = user.user_id,
+            id = user.id,
             name = user.name,
             email = user.email,
-            user_name = user.user_name,
+            userName = user.userName,
             password = user.password
         )
-        val hasUser = repositoryUser.hasUserByUserName(newUser.user_name)
+        val hasUser = repositoryUser.hasUserByUserName(newUser.userName)
         if (!hasUser) {
             repositoryUser.save(newUser)
             throw UserCreatedMessage()
@@ -73,10 +73,10 @@ class UserController(
             ResponseEntity.ok(
                 repositoryUser.save(
                     User(
-                        user_id = userId,
+                        id = userId,
                         name = user.name,
                         email = user.email,
-                        user_name = user.user_name,
+                        userName = user.userName,
                         password = user.password
                     )
                 )
