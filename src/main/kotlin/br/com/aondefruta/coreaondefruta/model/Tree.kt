@@ -11,7 +11,10 @@ class Tree(
     @GeneratedValue(strategy = IDENTITY)
     var id: Int,
     var name: String,
-    var id_user: Int,
+    @Column(name = "id_user")
+    var idUsuario: Int,
+    @Column(name = "user_creator")
+    var userCreator: String,
     var latitude: Double,
     var longitude: Double,
     var description: String? = "",

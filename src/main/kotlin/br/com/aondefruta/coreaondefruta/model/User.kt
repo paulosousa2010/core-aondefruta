@@ -9,11 +9,13 @@ import javax.persistence.GenerationType.IDENTITY
 class User(
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    var user_id: Int,
+    @Column(name = "user_id")
+    var id: Int,
     var name: String,
     var email: String,
-    var user_name: String,
+    @Column(name = "user_name")
+    var userName: String,
     var password: String,
-    @OneToMany(mappedBy = "id_user")
+    @OneToMany(mappedBy = "idUsuario")
     var trees: List<Tree>? = null
 ) {}

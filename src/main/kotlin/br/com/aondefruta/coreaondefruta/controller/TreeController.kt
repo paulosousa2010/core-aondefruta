@@ -35,10 +35,11 @@ class TreeController {
         val newTree = Tree(
             id = tree.id,
             name = tree.name,
-            id_user = tree.id_user,
+            idUsuario = tree.idUsuario,
             latitude = tree.latitude,
             longitude = tree.longitude,
-            description = tree.description
+            description = tree.description,
+            userCreator = tree.userCreator
         )
         repository.save(newTree)
         throw TreeAddedMessage()
@@ -52,10 +53,11 @@ class TreeController {
                     Tree(
                         id = treeId,
                         name = tree.name,
-                        id_user = tree.id_user,
+                        idUsuario = tree.idUsuario,
                         latitude = tree.latitude,
                         longitude = tree.longitude,
-                        description = tree.description
+                        description = tree.description,
+                        userCreator = tree.userCreator
                     )
                 )
             )

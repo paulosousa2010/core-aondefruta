@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.Query
 
 interface TreeRepository : JpaRepository<Tree, Int> {
 
-    @Query("SELECT t FROM Tree t WHERE t.id_user = ?1 ORDER BY t.id desc")
+    @Query("SELECT t FROM Tree t WHERE t.idUsuario = ?1 ORDER BY t.id desc")
     fun findAllByUser(idUser: Int): List<Tree>
 }
